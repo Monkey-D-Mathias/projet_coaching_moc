@@ -59,14 +59,30 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getUserByRole(string $role, $maxResult = null){
         $query = $this->createQueryBuilder('user')
         ->andWhere('user.roles LIKE :role')
-        ->setParameter(':role', '%'.$role.'%');
+        ->setParameter(':role', '%'.$role.'%')
+        ->andWhere('user.active = :active')
+        ->setParameter(':active', 1)
+        ->andWhere('user.deleted_at IS NULL')
+        ;
         if (!is_null($maxResult)) {
             $query->setMaxResults($maxResult);
         }
         return  $query->getQuery()->getResult();
 
     }
-
+    public function findOneCoach($id){
+        return $this->createQueryBuilder('user')
+        ->andWhere('user.id = :id')
+        ->setParameter(':id', $id)
+        ->andWhere('user.roles LIKE :role')
+        ->setParameter(':role', '%ROLE_COACH%')
+        ->andWhere('user.active = :active')
+        ->setParameter(':active', 1)
+        ->andWhere('user.deleted_at IS NULL')
+        ->getQuery()
+        ->getOneOrNullResult()
+        ;
+    }
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

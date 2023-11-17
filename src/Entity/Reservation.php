@@ -34,6 +34,12 @@ class Reservation
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     private ?Salle $salle = null;
 
+    #[ORM\ManyToOne]
+    private ?User $coach = null;
+
+    #[ORM\Column]
+    private ?bool $confirm = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +113,30 @@ class Reservation
     public function setSalle(?Salle $salle): self
     {
         $this->salle = $salle;
+
+        return $this;
+    }
+
+    public function getCoach(): ?User
+    {
+        return $this->coach;
+    }
+
+    public function setCoach(?User $coach): self
+    {
+        $this->coach = $coach;
+
+        return $this;
+    }
+
+    public function isConfirm(): ?bool
+    {
+        return $this->confirm;
+    }
+
+    public function setConfirm(bool $confirm): self
+    {
+        $this->confirm = $confirm;
 
         return $this;
     }
